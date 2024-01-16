@@ -1,0 +1,19 @@
+{
+    "files.associations": {
+        "ostream": "cpp",
+        "iostream": "cpp",
+        "*.tcc": "cpp",
+        "bitset": "cpp",
+        "optional": "cpp",
+        "algorithm": "cpp",
+        "random": "cpp",
+        "istream": "cpp",
+        "numeric": "cpp",
+        "streambuf": "cpp",
+        "regex": "cpp",
+        "valarray": "cpp",
+        "new": "cpp"
+    },
+    "github.copilot.chat.localeOverride": "zh-CN",
+    "files.autoGuessEncoding": true
+}
