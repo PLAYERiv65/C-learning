@@ -1,78 +1,72 @@
 #include<bits/stdc++.h>
 using namespace std;
-const int N = 1e5;
-int n = 10,i1,i2;
-char c1,c2;
-float f1,f2;
-double d1,d2,pai;
-string s1;
-float sum[N<<2],add[N<<2];
-void bd(int l,int r,int rt)
+struct bian
 {
-    if(l == r)
-    {
-        sum[rt] = 0.1;
-        return ;
-    }
-    int mid = (l+r)>>1;
-    bd(l,mid,rt<<1);
-    bd(mid+1,r,rt<<1|1);
-    sum[rt] = sum[rt<<1] + sum[rt<<1|1];
+	int to,next,w;
+}bi[500010];
+struct dist
+{
+	int po,di;
+};
+int n,m,head[100010],dd[100010],cnt,cnt2,dise[100010],fw,s;
+bool v[100010];
+bool operator <(const dist a,dist b)
+{
+	return a.di>b.di;
 }
-float ksm(float a,int mi)
+void pb(int a,int b,int c)
 {
-    float ans = 1;
-    while(mi)
-    {
-        if(mi & 1)
-        {
-            ans *= a;
-        }
-        mi >>= 1;
-        a *= a;
-    }
-    return ans;
+	bi[cnt].to=b;
+	bi[cnt].w=c;
+	bi[cnt].next=head[a];
+	head[a]=cnt++;
 }
-void pp()
+void dij(int st)
 {
-    int u = 1;
-    double fm = 1;
-    pai = 0;
-    for(int i=1;i<=N<<2;i++)
-    {
-        pai += u*(4/fm);
-        fm += 2;
-        u *= -1;
-    }
+	memset(v,0,sizeof(v));
+	memset(dise,0x3f,sizeof(dise));
+	fw=0;
+	priority_queue<dist> dis;
+	dist ds;
+	ds.po=st;
+	ds.di=0;
+	dise[st]=0;
+	dis.push(ds);
+	while(!dis.empty())
+	{
+		int bai=dis.top().po,db=dis.top().di;
+		dis.pop();
+		if(v[bai]) continue;
+		v[bai]=1;
+		fw+=1;
+		for(int j=head[bai];j!=-1;j=bi[j].next)
+		{
+			dist disl;
+			if(dise[bai]+bi[j].w<dise[bi[j].to])
+			{
+				dise[bi[j].to]=dise[bai]+bi[j].w;
+				disl.po=bi[j].to;
+				disl.di=dise[bai]+bi[j].w;
+				dis.push(disl);
+			}
+		}
+	}
 }
 int main()
 {
-    pp();
-    i1 = int(pai*1000);
-    i2 = ksm(int(pai*100),2);
-    printf("%d %d\n",i1,i2);
-    c1 = 'a';
-    c2 = 'B';
-    printf("%c %c %d %d\n",c1,c2,c1,c2);
-    c1 -= ksm(2,5);
-    c2 += ksm(2,5);
-    printf("%c %c\n",c1,c2);
-    bd(1,n,1);
-    printf("%.20f\n",sum[1]);
-    cin>>s1;
-    cout<<sizeof(s1)<<endl;
-    for(int i=0;i<s1.length();i++)
-    {
-        if(s1[i]>=65 && s1[i]<=90) printf("%c",char(s1[i]+ksm(2,5)));
-        else if(s1[i]>=97 && s1[i]<=122) cout<<'*';
-        else printf("%x ",s1[i]);
-    }
-    cout<<endl;
-    float a,b,c;
-    cin>>a>>b>>c;
-    cout<<(2*a*b+2*b*c+2*a*c)<<endl;
-    float r;
-    cin>>r;
-    cout<<(pai*ksm(r,2))<<endl;
-    return 0;
+	memset(head,0xff,sizeof(head));
+	cin>>n>>m>>s;
+	for(int i=1;i<=m;i++)
+	{
+		int x,y,z;
+		scanf("%d%d%d",&x,&y,&z);
+		pb(x,y,z);
+	}
+	dij(s);
+	for(int i=1;i<=n;i++)
+	{
+		if(dise[i]<dise[0]) cout<<dise[i]<<" ";
+		else cout<<2147483647<<" ";
+	}
+	return 0;
 }

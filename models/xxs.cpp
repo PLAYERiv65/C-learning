@@ -1,5 +1,6 @@
 #include<bits/stdc++.h>
 using namespace std;
+#define ll long long
 const ll N = 1e8+10;
 ll n,q,k,p[N],cnt;
 bool isp[N];
@@ -19,7 +20,7 @@ ll main()
     for(ll i=1;i<=q;i++)
     {
         scanf("%d",&k);
-        prllf("%d\n",p[k]);
+        printf("%d\n",p[k]);
     }
     return 0;
 }
