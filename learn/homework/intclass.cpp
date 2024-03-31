@@ -31,8 +31,7 @@ private:
     int* ex;
     bool ne;
 public:
-    integer(int n=0);
-    
+    integer(int n=0); 
     int get();
     void change(int n);
     void rediv();
