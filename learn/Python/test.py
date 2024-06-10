@@ -1,21 +1,26 @@
-import time
+import random
 
-class timer:
-    def __init__(self, h=0, m=0, s=0):
-        self._h = h
-        self._m = m
-        self._s = s
-    
-    def update(self):
-        self._s += 1
-        if self._s == 60:
-            self._s = 0
-            self._m += 1
-        if self._m == 60:
-            self._m = 0
-            self._h += 1
-        if self._h == 24:
-            self._h = 0
+# 目标总和
+target_sum = 384
+# 整数个数
+num_integers = 21
+# 初始平均值
+average = target_sum / num_integers
+# 剩余要分配的值
+remaining = target_sum
+# 存储生成的整数
+integers = []
 
-    def __str__(self):
-        return f'{self._h:02d}:{self._m:02d}:{self._s:02d}'
+# 生成整数，直到达到目标总和
+for _ in range(num_integers - 1):
+    # 随机生成一个数，范围在平均值附近波动，但不超过剩余值的一半
+    # 这样可以确保最后一个数能够恰好达到剩余值
+    random_value = random.randint(1, max(1, int(remaining / 2)))
+    integers.append(random_value)
+    remaining -= random_value
+
+# 添加最后一个整数，使其总和恰好为目标值
+integers.append(remaining)
+
+# 打印结果，每个数之间用空格隔开
+print(' '.join(map(str, integers)))
