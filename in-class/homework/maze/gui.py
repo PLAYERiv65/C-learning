@@ -1,5 +1,6 @@
 """MAZE 迷宫类"""
 import pygame
+import random
 
 class MAZE:
     CELL_TYPES = {
@@ -23,6 +24,7 @@ class MAZE:
         self.mode = 0
         self.run_button = pygame.Rect(0, 0, 50, 20)  # 将按钮放在窗口的顶部
         self.reset_button = pygame.Rect(60, 0, 70, 20)
+        self.generate_button = pygame.Rect(160, 0, 70, 20)
         self.font_dis = pygame.font.SysFont('Courier New', 12)
         self.font_button = pygame.font.Font(None, 36)
 
@@ -52,7 +54,32 @@ class MAZE:
     
     def is_pixel_in(self, node):
         return 0 <= node[0] < self.width*20 and 0 <= node[1] < (self.height-1)*20
-
+    
+    def generate_maze(self):  # 使用随机深度优先搜索生成迷宫
+        for y in range(self.height-1):#先全设为墙
+            for x in range(self.width):
+                self.grid[y][x] = 1
+        directions = [(0, 2), (0, -2), (2, 0), (-2, 0)]  # 越过墙壁
+        
+        start = end = (0, 0)
+        self.set_type(start, self.CELL_TYPES["EMPTY"])
+        stack = [start]
+        while stack:
+            x, y = stack[-1]
+            self.grid[y][x] = 1
+            neighbors = []
+            for dx, dy in directions:
+                nx, ny = x + dx, y + dy
+                if 0 <= nx < self.width and 0 <= ny < self.height and self.grid[ny][nx] == self.CELL_TYPES["OBSTACLE"]:
+                    neighbors.append((nx, ny))
+            if neighbors:
+                random.shuffle(neighbors)  # 打乱邻居的顺序
+                nx, ny = neighbors[0]
+                stack.append((nx, ny))
+                self.grid[(y + ny) // 2][(x + nx) // 2] = self.CELL_TYPES["EMPTY"]
+            else:
+                stack.pop()
+    
     def draw(self):#绘制网格
         #显示当前输入模式
         if self.shift == 0:
@@ -72,6 +99,10 @@ class MAZE:
         pygame.draw.rect(self.screen, (255, 0, 0), self.reset_button)
         text = self.font_button.render("Reset", True, (0, 0, 0))
         self.screen.blit(text, (60, 0))
+        #generate按钮
+        pygame.draw.rect(self.screen, (0, 0, 255), self.generate_button)
+        text = self.font_button.render("Generate", True, (0, 0, 0))
+        self.screen.blit(text, (160, 0))
 
         # 绘制网格，为按钮区留空间
         for y in range(self.height-1):
@@ -113,17 +144,21 @@ class MAZE:
                 x //= 20
                 y //= 20
 
-                if event.button == 1:
-                    #run button
-                    if self.run_button.collidepoint(xx, yy):
+                if event.button == 1:#左键
+                    #run 按钮
+                    if self.run_button.collidepoint(xx, yy) and self.mode == 0:
                         if self.start is None or self.end is None:
                             print("Please select start point and end point first.")
                         else:
                             self.mode = 1
-                    #reset button
+                    #reset 按钮
                     if self.reset_button.collidepoint(xx, yy):
-                        self.__init__(self.width, self.height)
                         self.mode = 0
+                        self.__init__(self.width, self.height)
+                    #generate 按钮
+                    if self.generate_button.collidepoint(xx, yy) and self.mode == 0:
+                        self.clean()
+                        self.generate_maze()
             
                     if self.mode == 1 or not self.is_coordinate_in((x, y)):
                         continue

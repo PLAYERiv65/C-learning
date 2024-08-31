@@ -4,3 +4,10 @@ tempCodeRunnerFile.cpp
 *.txt
 *.out
 *.in
+*.pth
+*.ckpt
+*.gz
+*.pts
+explore/small_sem/3/chinese-poetry/
+explore/small_sem/2/imgs
+__pycache__/

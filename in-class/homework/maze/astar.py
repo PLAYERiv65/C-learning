@@ -1,10 +1,8 @@
-#使用astar算法处理MAZE类中的迷宫
-
 import heapq
 import pygame
 from time import sleep
 from gui import MAZE
-#计算maze中的曼哈顿距离
+#曼哈顿距离
 def distance(p1, p2):
     return abs(p1[0]-p2[0]) + abs(p1[1]-p2[1])
 #回溯路径，记录点的原类型并返回
