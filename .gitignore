@@ -8,6 +8,11 @@ tempCodeRunnerFile.cpp
 *.ckpt
 *.gz
 *.pts
+test.*
 explore/small_sem/3/chinese-poetry/
 explore/small_sem/2/imgs
+explore/pytorch/data
 __pycache__/
+
+build/
+dist/
